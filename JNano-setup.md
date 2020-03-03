@@ -45,7 +45,17 @@ Connect the host device (e.g. Autopilot)'s serial Transmit wire to the Jetson Na
 Always connect a ground wire between host device and companion computer. Using GPIO 9 GND is recommended.
 
 ### Networking
-Edit `/etc/network/interfaces` and add `auto wlan0`. This allows the Jetson Nano to automatically connect to a WiFi network.
+To access the Jetson Nano in headless mode over a ssh connection, edit `/etc/network/interfaces` and add
+```
+auto wlan0
+``` 
+This allows the Jetson Nano to automatically connect to a WiFi network on bootup.
+
+It is also recommended to edit `/etc/NetworkManager/conf.d/default-wifi-powersave-on.conf`, setting 
+```
+wifi.powersave = 2
+```
+This disables wifi power saving, which often helps mitigating WiFi dropouts.
 
 ## Multi-Device usage
 
@@ -95,7 +105,7 @@ Next, log out of the user account and login to an root account through a tty con
 ```
 usermod -l ${new-username} -d /home/${new-username} -m ${old-username}
 ```
-Finally, change the hostname so that 
+Finally, change the hostname by editing `/etc/hostname`
 
 ## Emergencies
 The Jetson Nano base image enables the full range of Magic Sysrq keys. The REISUB sequence (or parts of it) are invaluable in disaster recovery.
