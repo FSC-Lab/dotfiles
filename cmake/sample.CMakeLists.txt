@@ -1,0 +1,41 @@
+cmake_minimum_required(VERSION 2.8)
+
+project(sample_cmakelists)
+
+# Uncomment the following line if FindBoost.cmake fails to find Boost shared libraries
+set(Boost_LIBRARY_DIR /usr/lib/x86_64-linux-gnu)
+
+# Enforce aggressive optimization 
+set(CMAKE_CXX_FLAGS "-O3 -std=c++11")
+
+# Generate debug information
+set(CMAKE_CXX_FLAGS_DEBUG "-g -DDEBUG")
+
+find_package(Boost REQUIRED program_options)
+find_package(Eigen REQUIRED)
+find_package(Sophus REQUIRED)
+find_package(fmt REQUIRED)
+
+# For applications that wrap around Python
+find_package(PythonInterp 3.6 REQUIRED)
+find_package(PythonLibs 3.6 REQUIRED
+
+# For applications that requires the MATLAB API
+# Uses the modified FindMATLAB.cmake in this directory
+# Not to be confused with FindMatlab.cmake provided by cmake but is flawed 
+find_package(MATLAB REQUIRED)
+
+include_directories(${CERES_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIR})
+include_directories(include)
+
+add_executable(general_application general_application.cpp include/library_implementation.cpp)
+target_link_libraries(general_application ${CERES_LIBRARIES} ${Boost_LIBRARIES} fmt::fmt)
+
+add_executable(pywrap_application pywrap_application.cpp)
+target_include_directories(pywrap_application PRIVATE ${PYTHON_INCLUDE_DIRS})
+target_link_libraries(pywrap_application ${PYTHON_LIBRARIES})
+
+add_executable(matapi_application matapi_application.cpp)
+target_link_libraries(matapi_application ${MATLAB_LIBRARIES})
+
