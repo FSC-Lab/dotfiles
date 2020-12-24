@@ -9,7 +9,7 @@ mkdir build && cd build
 cmake .. && sudo make install
 ```
 
-## Brief Usage
+### Brief Usage
 Wrappers to Apriltag, e.g. [apriltag_ros](http://wiki.ros.org/apriltag_ros) are available for use. Developing an application using the native Apriltag API can be tricky due to its C-style syntax.
 
 ---
@@ -22,7 +22,7 @@ mkdir build && cd build
 cmake .. && sudo make install
 ```
 
-## Brief Usage
+### Brief Usage
 Format a string with fmt by
 ```
 #define FMT_HEADER ONLY
@@ -43,13 +43,59 @@ int main() {
 ```
 
 ---
+
+## Boost Program Options
+[boost::program_options](https://www.boost.org/doc/libs/1_63_0/doc/html/program_options.html) is a command line option parser as part of the Boost library collection. It can be installed separately from the remainder of boost by
+```
+sudo apt-get install libboost-program-options-dev
+```
+
+### Compile Instructions
+Using `boost::program_options` may be tricky because it is one of the few boost libraries that must be linked to a shared library. When compiling on the command line, use the following command
+```
+g++ -lboost_program_options foo.cpp
+```
+When using CMake, add these lines to `CMakeLists.txt`
+```
+find_package(Boost REQUIRED COMPONENTS program_options)
+
+add_executable(foo foo.cpp)
+target_link_libraries(foo ${Boost_LIBRARIES})
+```
+
+### Brief Usage
+```
+#include <boost/program_options.hpp>
+
+int main(int argc, char **argv) {
+    namespace po = boost::program_options;
+
+    po::options_description opts("Project Description");
+
+    opts.add_options()
+      ("b,bool", po::bool_switch(), "A bool") // Implied to be false by default
+      ("i,integer", po::value<int>()->default_value(100), "An int"); 
+      // Note that default_value(100) takes an actual int
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    const bool bool_arg = res["bool"].as<bool>();
+    const int int_arg = res["int"].as<int>();
+
+    return 0;
+}
+```
+
+---
 ## cxxopts
 [cxxopts](https://github.com/jarro2783/cxxopts) is a lightweight C++ command line option parser. This is a header only library. Obtain the header ```cxxopts.hpp``` from the source repository by
 ```
 git clone https://github.com/jarro2783/cxxopts.git
 ```
 
-## Brief Usage
+### Brief Usage
 Clone ths cxxopts repository (or add as subtree / submodule) into your project directory, then include the header file `cxxopts.hpp`. The following example is adapted from cxxopts readme.
 ```
 #include "cxxopts/cxxopts.hpp"
@@ -60,6 +106,7 @@ int main(int argc, char **argv) {
     opts.add_options()
       ("b,bool", "A bool") // Implied to be false by default
       ("i,integer", "An int", cxxopts::value<int>()->default_value("100"));
+      // Note that default_value("100") takes a string
 
     cxxopts::ParseResult res = opts.parse(argc, argv);
 
@@ -164,7 +211,7 @@ mkdir build && cd build
 cmake .. && sudo make install
 ```
 
-## Brief Usage
+### Brief Usage
 The following example demonstrates constructing SO3 and SE3 objects and interacting with them using exponential and log maps
 ```
 #include <iostream>
