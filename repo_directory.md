@@ -44,6 +44,53 @@ int main() {
 
 ---
 
+## Boost Filesystem
+[boost::filesystem](https://www.boost.org/doc/libs/1_75_0/libs/filesystem/doc/index.htm) provides facilities to manipulate files and directories, and the paths that identify them. It can be installed separately from the remainder of boost by
+```
+sudo apt-get install libboost-filesystem-dev
+```
+
+### Compile Instructions
+Using `boost::program_options` may be tricky because it is one of the few boost libraries that must be linked to a shared library. When compiling on the command line, use the following command
+```
+g++ -lboost_system -lboost_filesystem foo.cpp
+```
+When using CMake, add these lines to `CMakeLists.txt`
+```
+find_package(Boost REQUIRED COMPONENTS system filesystem)
+
+add_executable(foo foo.cpp)
+target_link_libraries(foo ${Boost_LIBRARIES})
+```
+
+### Brief Usage
+```
+#include <boost/filesystem.hpp>
+#include <fstream>
+
+int main(int argc, char **argv) {
+    namespace fs = boost::filesystem;
+
+    const fs::path path_arg(argv[1]);
+    const fs::path fullpath = path_arg.is_relative() ? 
+        fs::current_path() / path_arg : 
+        path_arg;
+
+    if (!fs::is_directory(path.parent_path())) {
+        if (!fs::create_directory(path.parent_path())) {
+            return 1;
+        }
+    }
+
+    std::ofstream ofs(path.string());
+    ofs << "Placeholder\n";
+    ofs.close();
+    return 0;
+
+}
+```
+
+---
 ## Boost Program Options
 [boost::program_options](https://www.boost.org/doc/libs/1_63_0/doc/html/program_options.html) is a command line option parser as part of the Boost library collection. It can be installed separately from the remainder of boost by
 ```
