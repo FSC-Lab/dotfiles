@@ -1,5 +1,41 @@
 # FSC C++ Style Guide
 
+## Using formatters
+
+Using a formatter is **encouraged**! You are welcome to install a conformant formatter and ignore the rest of this article. 
+
+The recommended formatter is `clang-format`. Install it by
+```
+sudo apt-get install clang-format
+```
+
+Apply formatting to a document and display it on the console with
+```
+clang-format ./path/to/hello_world.cpp
+```
+
+else format the document in place with the `-i` flag
+```
+clang-format -i ./path/to/hello_world.cpp
+```
+
+### Clang Format for VSCode
+If you are using VSCode (highly recommended), install the [clang-format extension](https://marketplace.visualstudio.com/items?itemName=xaver.clang-format) by searching for it in the extensions tab of VSCode and installing.
+
+Lastly, edit VScode settings by navigating to **File**-**Preferences**-**Settings**, then search for `C_Cpp.formatting` in the search bar. In the dropdown menu for this option, select `ClangFormat`.
+
+*voila*, you can now format your current document with `Ctrl-Shift-I`
+
+### Clang Format configuration
+Formatting styles can be fine tuned with a `.clang-format` file at your C++ project root or in the `$HOME` directory. A bare bones recommendation for `.clang-format` file is
+```
+---
+BasedOnStyle: Google
+---
+Language: Cpp
+ColumnLimit: 120
+AlignTrailingComments: true
+```
 ## Coding Style
 
 You are expected to conform to the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html). The following provides a visual guide to our decisions to resolve the most debated stylistic conflicts.
