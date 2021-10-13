@@ -50,8 +50,3 @@ zinit wait'!0' light-mode for \
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-alias cls='clear'
-
-source /opt/ros/melodic/setup.zsh
-
-source ~/catkin_ws/devel/setup.zsh
